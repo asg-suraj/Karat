@@ -7,5 +7,7 @@ Karat Exam coding Questions
 6. Generate URL-safe, collision-resistant idempotency keys for payment requests. -- IdempotencyKey.java
 7. Move Zeros of Array -- MoveZeros.java
 8. Rotate Array by K elements -- RotateArrayByK.java
+9. Queue,Stack,PriorityQueue etc --QueueDSA.java
+10. Song Pair of 7 minute -- Two Sum Problem -- SevenMinuteSongPair.java
 
 
