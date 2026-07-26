@@ -1,0 +1,59 @@
+/*Implement a token bucket rate limiter with allow() to cap QPS; discuss distributed extension.*/
+
+
+"Lua script (atomic token bucket) : -- KEYS[1] = bucket key
+-- ARGV[1] = nowNanos
+-- ARGV[2] = capacity
+-- ARGV[3] = intervalNanosPerToken
+-- ARGV[4] = permits (default 1)
+-- Returns: 1 if allowed, 0 otherwise
+
+local key = KEYS[1]
+local now = tonumber(ARGV[1])
+local capacity = tonumber(ARGV[2])
+local interval = tonumber(ARGV[3])
+local permits = tonumber(ARGV[4])
+
+local data = redis.call('HMGET', key, 'tokens', 'last')
+local tokens = tonumber(data[1])
+local last = tonumber(data[2])
+
+if tokens == nil then
+  tokens = capacity
+  last = now
+end
+
+if now > last then
+  local elapsed = now - last
+  local add = math.floor(elapsed / interval)
+  if add > 0 then
+    tokens = math.min(capacity, tokens + add)
+    last = last + add * interval
+  end
+end
+Java usage (Jedis example) :// Pseudocode: run the script with EVALSHA for efficiency after loading once
+String script = ""...lua above..."";
+String key = ""rl:merchant:123""; // identify the entity being limited
+long nowNs = System.nanoTime();
+long capacity = 100;
+long intervalNanos = 10_000_000L; // e.g., qps=100 => 1e9/100
+long permits = 1;
+
+Object res = jedis.eval(script, 1, key,
+        String.valueOf(nowNs),
+        String.valueOf(capacity),
+        String.valueOf(intervalNanos),
+        String.valueOf(permits));
+
+boolean allowed = Long.valueOf(1).equals(res);
+if tokens >= permits then
+  tokens = tokens - permits
+  redis.call('HMSET', key, 'tokens', tokens, 'last', last)
+  -- Optional: set TTL so idle buckets expire
+  redis.call('EXPIRE', key, 3600)
+  return 1
+else
+  redis.call('HMSET', key, 'tokens', tokens, 'last', last)
+  redis.call('EXPIRE', key, 3600)
+  return 0
+end"
