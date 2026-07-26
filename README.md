@@ -1,4 +1,6 @@
-Karat Exam coding Questions
+JPA folder and other folder try to ratta
+
+Karat Exam coding Questions Array Folder
 1. Normalize and deduplicate account IDs (trim + uppercase) from a list of strings. -- Thenormalization.java
 2. Compute top-K merchants by total spend from a stream of (merchant, amount) transactions. -- TopKMerchants.java 
 3. Group transaction reference IDs that are anagrams and return grouped lists. --GroupAnagrams.java
@@ -9,7 +11,6 @@ Karat Exam coding Questions
 8. Rotate Array by K elements -- RotateArrayByK.java
 9. Queue,Stack,PriorityQueue etc --QueueDSA.java
 10. Song Pair of 7 minute -- Two Sum Problem -- SevenMinuteSongPair.java
-11. JPA folder seaprate --only ratta
-12. Bounded Blocking Queue ---Samjun ratta
+11. Bounded Blocking Queue ---Samjun ratta
 
 
