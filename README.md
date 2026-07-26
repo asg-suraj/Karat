@@ -10,5 +10,6 @@ Karat Exam coding Questions
 9. Queue,Stack,PriorityQueue etc --QueueDSA.java
 10. Song Pair of 7 minute -- Two Sum Problem -- SevenMinuteSongPair.java
 11. JPA folder seaprate --only ratta
+12. Bounded Blocking Queue ---Samjun ratta
 
 
