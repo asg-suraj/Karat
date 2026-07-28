@@ -1,0 +1,85 @@
+Based on the comprehensive contents of the PDF you provided, here is a highly structured study plan. Even though the book lists the "System Design Basics" at the very end, you should absolutely start there to build your foundational vocabulary before tackling the complex architectures.
+
+Here is your step-by-step study plan to master this material:
+
+### Phase 1: Master the Core Building Blocks
+
+Before looking at any specific system, you must understand the underlying concepts. Jump to the **System Design Basics** section first.
+
+* **Key Characteristics of Distributed Systems:** Understand the definitions and trade-offs of Scalability, Reliability, Availability, Efficiency, and Serviceability or Manageability.
+
+
+* **Networking and Traffic:** Study Load Balancing (including benefits and algorithms) and Proxies.
+
+
+* **Performance Optimization:** Read the sections on Caching (Application server cache, Content Distribution Network, Cache Invalidation, and Cache eviction policies) and Indexes.
+
+
+* **Data Management:** Thoroughly understand Sharding or Data Partitioning (Partitioning Methods and Criteria), Redundancy and Replication, and Consistent Hashing.
+
+
+* **Database Selection:** Read the SQL vs. NoSQL section and the CAP Theorem to understand exactly when to use which database.
+
+
+* **Client-Server Communication:** Review Long-Polling vs WebSockets vs Server-Sent Events (SSEs) to understand how real-time data flows.
+
+
+
+### Phase 2: Memorize the 7-Step Interview Framework
+
+Once you know the building blocks, learn how to structure your 45-minute interview. Read the **"System Design Interviews: A step by step guide"**. You must follow this exact order during your interview:
+
+* **Step 1:** Requirements clarifications.
+
+
+* **Step 2:** System interface definition.
+
+
+* **Step 3:** Back-of-the-envelope estimation.
+
+
+* **Step 4:** Defining data model.
+
+
+* **Step 5:** High-level design.
+
+
+* **Step 6:** Detailed design.
+
+
+* **Step 7:** Identifying and resolving bottlenecks.
+
+
+
+### Phase 3: Foundational Case Studies (The "Must-Reads")
+
+Apply your 7-step framework to these specific case studies. They represent the most common architectural patterns you will face.
+
+* **Designing a URL Shortening service like TinyURL:** Read this to understand how to design a read-heavy system, handle basic database design, and implement basic data partitioning and replication.
+
+
+* **Designing Instagram or Designing Twitter:** Read one of these to understand how to handle massive data storage, generate unique IDs (like PhotoIDs or TweetIDs), and most importantly, how to approach Ranking and News Feed/Timeline Generation.
+
+
+* **Designing Dropbox:** This is essential for understanding cloud file storage, specifically how to handle Data Deduplication, Metadata Partitioning, and Message Queuing Services.
+
+
+
+### Phase 4: Specialized System Components
+
+Once you are comfortable with standard web applications, study these chapters to understand specialized algorithms and data structures.
+
+* **Designing Facebook Messenger:** Read this to learn about real-time chat architectures, specifically how to manage a user's online/offline status and how to store and retrieve messages efficiently.
+
+
+* **Designing Typeahead Suggestion:** This will teach you how to use a Trie data structure for real-time string matching and how to permanently store and partition that Trie.
+
+
+* **Designing an API Rate Limiter:** Focus on this chapter to learn about the Sliding Window algorithm and the Sliding Window with Counters algorithm.
+
+
+* **Designing Yelp or Nearby Friends / Designing Uber backend:** These are crucial for understanding location-based services. You will learn how to use Grids, dynamic size grids, and QuadTrees to perform proximity searches.
+
+
+
+How much time do you realistically have to dedicate to studying this guide each day?
