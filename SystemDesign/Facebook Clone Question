@@ -1,0 +1,35 @@
+Question:
+"We are working on a clone of Facebook. We want to add a numeric count to every post showing how many friends the post’s author has at the time of viewing the post, like this:
+Our database has two tables:
+ 
+USER
+user_id (primary key)
+name
+created_date
+ 
+USER_RELATIONSHIP
+friendship_id (primary key, unique to each relationship)
+user1_id (indexed)
+user2_id (indexed)
+start_date
+ 
+Focusing on the database, how would you implement the friend-count feature?
+Note we will soon be more popular than Facebook, so the solution needs to scale."
+
+
+
+___________________________________________________________________________________________________________________________________________________________
+
+"To implement this at scale, we have to look at the read-to-write ratio. A social feed is heavily read-heavy—posts are viewed millions of times a minute, but friendships are formed much less often.
+
+If we use the naive approach and run a COUNT(*) query on the USER_RELATIONSHIP table every time a post is viewed, our database will instantly become a bottleneck. Counting rows is an O(N) operation, and doing that on every post load will crash the system.
+
+Because of this, we need to shift the computation from the read path to the write path. My solution is database denormalization.
+
+First, I would update the schema by adding a friend_count integer column directly to the USER table, defaulting to zero.
+
+Next, we change the write path. When User A and User B become friends, we wrap the operation in a database transaction. We insert the new record into the USER_RELATIONSHIP table, and in that same transaction, we update the USER table to increment the friend_count by 1 for both users. We do the exact reverse for unfriending. To prevent race conditions if a user gets multiple requests at once, the update must be an atomic operation—like friend_count = friend_count + 1—rather than calculating the count in the application memory.
+
+This completely optimizes the read path. When a user loads their feed, fetching the author's friend count is now just an O(1) lookup directly from the USER table.
+
+Finally, to truly hit 'Facebook scale,' reading from a SQL database for every post is still too slow. I would put a distributed cache, like Redis, in front of the database. When the feed loads, the application fetches the friend count from RAM. When a new friendship is formed, we would use an asynchronous message queue, like Kafka, to update the SQL database and the Redis cache in the background so the user never experiences a delay."
