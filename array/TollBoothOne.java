@@ -10,14 +10,51 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class TollBooth {
+/*
+* "We are writing software to analyze logs for toll booths on a highway. This highway is a divided highway with limited access; the only way on to or off of the highway is through a toll booth.
+
+There are three types of toll booths:
+* ENTRY toll booths, where a car goes through a booth as it enters the highway.
+* EXIT toll booths, where a car goes through a booth as it exits the highway.
+* MAINROAD (M in the diagram), which have sensors that record a license plate as a car drives through at full speed.
+
+        Exit Booth                         Entry Booth
+            |                                   |
+            |                                   |
+             \                                 /
+---<------------<---------M---------<-----------<---------<----
+                                         (West-bound side)
+
+===============================================================
+
+                                         (East-bound side)
+------>--------->---------M--------->--------->--------->------
+             /                                 \
+            |                                   |
+            |
+                                      |
+        Entry Booth                         Exit Booth
+*
+
+
+There are total 3 tasks 
+For our first task:
+1-1) Read through and understand the code and comments below. Feel free to run the code and tests.
+1-2) The tests are not passing due to a bug in the code. Make the necessary changes to LogEntry to fix the bug.
+
+second and third tasks are to complete the methods with logic.
+* */
+
+public class TollBoothOne {
 
   public static void main(String[] args) {
     // In a real Karat environment, these tests would run automatically against the code.
     System.out.println("Environment ready. Run tests to begin.");
-    LogEntry l = new LogEntry("34400.409 SXY288 210E ENTRY");
+
+//    LogEntry l = new LogEntry("34400.409 SXY288 210E ENTRY");
   }
 }
+
 
 class LogEntry {
 
@@ -31,7 +68,8 @@ class LogEntry {
     String[] tokens = logLine.split(" ");
 
     // TODO: There is a bug in the parsing logic below. Find and fix it (Task 1).
-    this.timestamp = Double.parseDouble(tokens[0]);
+//    this.timestamp = Float.parseFloat(tokens[0]);  //this was error
+    this.timestamp = Double.parseDouble(tokens[0]);  //this was fix
     this.licensePlate = tokens[1];
     this.boothType = tokens[3];
     this.location = Integer.parseInt(tokens[2].substring(0, tokens[2].length() - 1));
@@ -70,8 +108,7 @@ class LogEntry {
   public String toString() {
     return String.format(
         "<LogEntry timestamp: %s  license: %s  location: %s  direction: %s  booth type: %s>",
-        String.valueOf(timestamp), licensePlate, location, direction, boothType
-    );
+        String.valueOf(timestamp), licensePlate, location, direction, boothType);
   }
 }
 
