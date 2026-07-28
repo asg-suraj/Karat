@@ -1,0 +1,36 @@
+Same pattern different Question --> We are working on a clone of Google Docs.
+
+The software has the following features and limitations:
+
+Multiple users may work on a single document at the same time.
+
+A document must be handled by a single server, no matter how many users are using it.
+
+We have a fixed number of servers which will be sufficient to handle our expected load if used properly.
+
+Our load balancer uses a round-robin system to permanently assign documents to each server, so each server will have an equal number of documents.
+
+Do you have any concerns about this load balancing system?
+
+___________________________________________________________________________________________________________________________________
+Answer:
+
+Here is exactly how to deliver this answer in 3 to 4 minutes. Read this at a steady, conversational pace, emphasizing the bolded terms that the interviewer is looking for.
+
+---
+
+"Yes, I have two major concerns with this load balancing system: **uneven resource utilization** and **fault tolerance**.
+
+The biggest flaw with using round-robin to permanently assign documents is that it assumes all documents carry the exact same workload. In reality, a Google Docs clone will have extreme variance in traffic. One document might be a personal grocery list with a single user editing it once a week, while another document could be a corporate all-hands agenda with 200 users typing simultaneously.
+
+Because the load balancer blindly distributes documents in a circle, one server could easily be assigned several of these highly active, heavy documents. This will create massive **hotspots**. That specific server will suffer from **CPU and memory starvation** and likely crash, while other servers in the cluster sit completely idle with lightweight documents. Round-robin simply does not account for the *weight* or *activity level* of the connections.
+
+My second concern is the word 'permanently.' Permanent assignment creates a **Single Point of Failure (SPOF)**. Hardware fails. If Server #3 goes down, and its documents are permanently mapped to it, those users are completely locked out of their work until the server is rebooted.
+
+To fix this and properly utilize our fixed number of servers, I would implement two changes:
+
+First, I would move from naive round-robin to a **load-aware routing algorithm**, such as 'Least Connections' or 'Least Outstanding Requests.' Instead of permanently assigning a document upon creation, we should dynamically assign the document to a server only when an active editing session begins. A central coordinator service, like **ZooKeeper or Redis**, would check which server has the most available CPU and memory *at that exact moment*, and assign the heavy document there.
+
+Second, the assignment must be **ephemeral, not permanent**. If a server crashes, the load balancer needs health checks to detect the failure instantly, and the coordinator should transparently migrate those active document sessions to the remaining healthy servers so the users don't experience an outage."
+
+---
