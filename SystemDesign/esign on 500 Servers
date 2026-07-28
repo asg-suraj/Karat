@@ -6,7 +6,7 @@ Flat-file logs from 500 production servers. The logs track the document IDs for 
 Now that the bug is fixed, how can we find all the missed notifications? The service handles billions of documents daily, so we need a scalable solution.
 
 ______________________________________________________________________________________________________________________________________________________________________________________________________
-Here is exactly how to answer this in 3 to 4 minutes. Read this at a steady, conversational pace, emphasizing the bolded terms.
+Here is exactly how to answer this in 3 to 4 minutes. Read this at a steady, conversational pace, emphasizing the bolded terms. 
 
 ---
 
