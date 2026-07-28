@@ -1,0 +1,22 @@
+Which consistency model is more appropriate for each of these applications: strong consistency, or eventual consistency? Why?
+An API call that needs to respond within 20 milliseconds, used to retrieve metadata about a video stream. The metadata includes things like the author name, rating, and view count.
+A web analytics platform recording every single click on a popular web page.
+A banking system that makes deposits and payments to checking accounts.
+
+_________________________________________________________________________________________________________
+Here is how to answer this in 3 to 4 minutes, clearly mapping each scenario to the core tradeoffs of the **CAP Theorem** (Consistency, Availability, Partition Tolerance).
+
+Read this at a steady, conversational pace, emphasizing the bolded terms.
+
+---
+
+"For the **Video Metadata API**, the correct choice is **Eventual Consistency**.
+The determining factor here is the strict **20-millisecond latency budget**. Achieving sub-20ms response times almost guarantees we need to read this data from a distributed, in-memory cache close to the user, like Redis or a CDN. Furthermore, the data itself—view counts and ratings—does not require strict real-time correctness. If a video has a million views, and a user sees a view count that is 30 seconds out of date, it has absolutely no impact on the user experience. By trading strict consistency for eventual consistency, we ensure **high availability and ultra-low latency**.
+
+For the **Web Analytics Platform**, the correct choice is also **Eventual Consistency**.
+A popular web page generating click events for every single user interaction creates a massive, **high-velocity write load**. If we required strong consistency, the database would spend all its time locking rows and coordinating state across nodes, creating a massive bottleneck that would drop incoming data. Instead, analytics platforms prioritize **write availability**. We would use a system that ingests events into a message queue like Kafka, acknowledging the write immediately, and then aggregates those clicks in the background. It is perfectly fine if the analytics dashboard takes a few minutes to eventually reflect the updated click counts.
+
+Finally, for the **Banking System**, the only acceptable choice is **Strong Consistency**.
+When dealing with financial transactions like deposits and payments, **data correctness and integrity** are paramount. If a user has a balance of $100, withdraws $100 from an ATM, and immediately opens their mobile app to make a transfer, the system must instantly know the balance is $0. If this system were eventually consistent, it would open the door to **race conditions and double-spending**, allowing users to overdraft their accounts. We must enforce **ACID transactions** and distributed locks, accepting that the system will be slightly slower, or even temporarily unavailable during network partitions, in order to guarantee that all reads reflect the absolute latest write."
+
+---
