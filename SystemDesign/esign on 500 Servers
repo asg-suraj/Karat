@@ -1,0 +1,30 @@
+We have a distributed system that allows users to “e-sign” legal documents. A document may need hundreds of signatures, 
+and after it’s fully signed, the owner gets a notification. We had a bug that made about half of the notifications fail.
+We have two pieces of information:
+A database that tracks documents, including status of if they are fully complete.
+Flat-file logs from 500 production servers. The logs track the document IDs for successfully sent notifications, but failed attempts are missing.
+Now that the bug is fixed, how can we find all the missed notifications? The service handles billions of documents daily, so we need a scalable solution.
+
+______________________________________________________________________________________________________________________________________________________________________________________________________
+Here is exactly how to answer this in 3 to 4 minutes. Read this at a steady, conversational pace, emphasizing the bolded terms.
+
+---
+
+"Fundamentally, this is a **set difference problem** operating at massive scale. We need to take Dataset A—all the fully completed documents from the database—and subtract Dataset B—the successfully notified documents found in the server logs. Whatever is left over is our exact list of missed notifications.
+
+The trap here is the scale. Because we are processing billions of documents across 500 servers, we cannot just write a script that queries the database and loops through the logs. A single machine would run out of memory, and the network I/O would take weeks.
+
+To solve this, we must use a **distributed data processing framework**, like **Apache Spark** or Hadoop MapReduce.
+
+Here is the step-by-step pipeline I would build to execute this:
+
+First, we handle **Data Ingestion and Centralization**. We cannot query 500 live production servers directly. I would use a log shipping tool like Fluentd or Logstash to aggregate all the flat-file logs from the 500 servers and dump them into a distributed object store, like Amazon S3 or HDFS. At the same time, we would run an asynchronous batch job on a read-replica of the database to extract all `document_ids` where the status is 'fully complete' during the timeframe of the bug. We dump this list into S3 as well.
+
+Second, we write a **Spark Job** to process the data in parallel across a cluster of machines.
+Spark will read the database dump into one dataset, and parse the text logs to extract the successful `document_ids` into a second dataset.
+
+Third, we execute a **Left Anti-Join**—or a distributed set subtraction. We tell Spark to join the Completed Documents dataset with the Successful Logs dataset, and filter for the records that *only* exist in the database dataset. Because Spark uses a distributed MapReduce paradigm, it partitions the billions of IDs by a hash, allowing hundreds of worker nodes to calculate the differences simultaneously in a matter of minutes.
+
+The output of this Spark job will be perfectly clean files containing only the `document_ids` that suffered the bug, which we can then feed into our notification service to send the missing alerts."
+
+---
