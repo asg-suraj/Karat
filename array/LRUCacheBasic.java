@@ -15,6 +15,7 @@ public class LRUCacheBasic {
         return size() > maxCapacity;
       }
     };
+
     //  The Thread Safe version of basic LRU Cache 
 //    Map<Integer, Integer> lruCache = Collections.synchronizedMap(
 //        new LinkedHashMap<>(maxCapacity, 0.75f, true) {
