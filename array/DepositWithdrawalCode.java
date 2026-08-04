@@ -81,7 +81,7 @@ class AccountManager {
     //for(Map.Entry<Integer , Account> acc : accounts.entrySet()){
     //Calculate for Each Account ID
 
-    // Not optimzed Solution
+    // Not optimized Solution
 //      for(Integer accId  : accounts.keySet()){
 //        double sum = 0.0;
 //        int count=0;
@@ -96,7 +96,7 @@ class AccountManager {
 //
 //
 //      }
-    //}
+    //
 
 //    Java 8 options
 //    return transactions.stream()
